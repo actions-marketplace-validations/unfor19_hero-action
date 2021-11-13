@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Set
+      - name: Set Environment Variables
         run: |
           echo "HERO_SRC_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
       - name: Workflow Dispatch Status
