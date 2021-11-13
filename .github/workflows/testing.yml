@@ -1,0 +1,128 @@
+name: testing
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - "README.md"
+      - ".drone.yml"
+  workflow_dispatch:
+
+jobs:
+  dispatch_test_action:
+    name: Dispatch Test Action
+    runs-on: ubuntu-20.04
+    env:
+      GH_OWNER: unfor19
+      GH_REPO: replacer-action-test
+      GH_WORKFLOW: test-action.yml
+      GH_REF: master
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Workflow Dispatch
+        run: |
+          curl --fail -X POST -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            "https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/dispatches" \
+            -d '{"ref":"'"${GH_REF}"'", "inputs": { "src_repository": "'${GITHUB_REPOSITORY}'", "src_workflow_name": "'"${GITHUB_WORKFLOW}"'", "src_sha": "'"${GITHUB_SHA}"'" } }'
+      - name: Create Status Check
+        run: |
+          curl --fail -X POST -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -d '{"state":"pending", "context": "test-action", "description": "Status of '"${GH_REPO}"'", "target_url": "https://github.com/'${GH_OWNER}/${GH_REPO}'/actions/workflows/'"${GH_WORKFLOW}"'"}'
+
+  test-docker:
+    runs-on: ubuntu-20.04
+    name: Test Docker
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+        with:
+          install: true
+      - name: Prepare
+        id: prep
+        run: |
+          IMAGE="unfor19/replacer-action"
+          TAG=$(echo $GITHUB_SHA | head -c7)
+          echo ::set-output name=tagged_image::${IMAGE}:${TAG}
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      - name: Build Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          builder: ${{ steps.buildx.outputs.name }}
+          push: false
+          load: true
+          tags: ${{ steps.prep.outputs.tagged_image }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+      - name: Test In Docker
+        env:
+          DOCKER_TAG: ${{ steps.prep.outputs.tagged_image }}
+          DOCKER_BUILD: "false"
+        run: |
+          ./tests/test.sh
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+  update-readme:
+    # Eat your own dog food
+    # Using this action to update its own README.md with the CLI's help menu
+    runs-on: ubuntu-20.04
+    name: Update README.md
+    env:
+      SRC_FILE_PATH: .help_menu
+      DST_FILE_PATH: README.md
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare source file
+        run: |
+          echo "\`\`\`bash" > ${{ env.SRC_FILE_PATH }}
+          ./entrypoint.sh --help >> ${{ env.SRC_FILE_PATH }}
+          echo "\`\`\`" >> ${{ env.SRC_FILE_PATH }}
+      - name: Update README.md file
+        uses: ./ # Uses an action in the root directory
+        with:
+          src-file-path: ${{ env.SRC_FILE_PATH }}
+          dst-file-path: ${{ env.DST_FILE_PATH }}
+          start-value: "<!-- help_menu_start -->"
+          end-value: "<!-- help_menu_end -->"
+
+  dry-run:
+    runs-on: ubuntu-20.04
+    name: Dry Run
+    steps:
+      - uses: actions/checkout@v2
+      - name: Prepare source file
+        run: |
+          echo "<div>$(whoami)</div>" > test_results.log
+      - name: Update README.md file
+        uses: ./ # Uses an action in the root directory
+        with:
+          src-file-path: "test_results.log"
+          dst-file-path: "README.test.md"
+          start-value: "<!-- replacer_start -->"
+          end-value: "<!-- replacer_end -->"
+          git-skip-push: true
+      - name: Prepare original source file
+        run: |
+          echo "<div>User name will appear here instead</div>" > "test_results.log"
+      - name: Revert README.test.md file
+        uses: ./ # Uses an action in the root directory
+        with:
+          src-file-path: "test_results.log"
+          dst-file-path: "README.test.md"
+          start-value: "<!-- replacer_start -->"
+          end-value: "<!-- replacer_end -->"
+          git-skip-push: true

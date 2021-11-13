@@ -1,0 +1,17 @@
+kind: pipeline
+type: docker
+name: testing-drone
+
+steps:
+  - name: Prepare source file
+    image: alpine:3.12
+    cmd: |
+      echo "<div>$(whoami)</div>" > test_results.log
+  - name: Dry run
+    image: unfor19/replacer-action:latest
+    settings:
+      src_file_path: "test_results.log"
+      dst_file_path: "README.test.md"
+      start_value: "<!-- replacer_start -->"
+      end_value: "<!-- replacer_end -->"
+      git_skip_push: true
