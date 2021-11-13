@@ -18,13 +18,90 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
 
 ## Usage
 
+In your **action** repository, add the following **job**
+
 ```yaml
 name: Update README.md
 on:
   push:
 
 jobs:
-# ...
+   dispatch_test_action:
+      name: Dispatch Test Action
+         runs-on: ubuntu-20.04
+      steps:
+         - uses: actions/checkout@v2
+         - name: Set Environment Variables
+         run: |
+            echo "HERO_SRC_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
+         - name: Workflow Dispatch Status
+         uses: unfor19/hero-action@v1
+         with:
+            action: "dispatch-status"
+            src_repository: "unfor19/hero-action"
+            src_workflow_name: "testing"
+            target_repository: "unfor19/hero-action-test"
+            target_workflow_name: "test-action.yml"
+            target_ref: "master"
+            gh_token: ${{ secrets.GH_TOKEN }} # TODO: Add required scope
+            src_sha: ${{ env.HERO_SRC_SHA }}  # Fetched from previous step            
+```
+
+In your **action-test** repository, add the following file `.github/workflows/test-action.yml`
+
+```yaml
+name: test-action
+
+on:
+  workflow_dispatch:
+    inputs:
+      src_repository:
+        description: Source Repository - {owner}/{repo_name}
+        required: true
+      src_workflow_name:
+        description: Source Workflow Name
+        required: true
+      src_sha:
+        description: Source Repository SHA - GITHUB_SHA
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    name: Dummy Test
+    steps:
+      - uses: actions/checkout@v2
+      # Add steps to test your action ...
+    outputs:
+      target_job_status: ${{ job.status }}
+
+  update-status-check:
+    name: Update Status Check In Source Repository
+    runs-on: ubuntu-20.04
+    needs:
+      - test # Change if necessary
+    if: ${{ always() }}
+    env:
+      HERO_SRC_REPOSITORY: ${{ github.event.inputs.src_repository }}
+      HERO_SRC_WORKFLOW_NAME: ${{ github.event.inputs.src_workflow_name }}
+      HERO_SRC_SHA: ${{ github.event.inputs.src_sha }}
+      HERO_TARGET_JOB_STATUS: ${{ needs.test.outputs.target_job_status }}
+    steps:
+      - name: Set Environment Variables
+        run: |
+          echo "HERO_TARGET_RUN_ID=${GITHUB_RUN_ID}" >> $GITHUB_ENV
+          echo "HERO_TARGET_REPOSITORY=${GITHUB_REPOSITORY}" >> $GITHUB_ENV
+      - name: Status Update
+        uses: unfor19/hero-action@master
+        with:
+          action: "status-update"
+          gh_token: ${{ secrets.GH_TOKEN }}
+          src_repository: ${{ env.HERO_SRC_REPOSITORY }}
+          src_workflow_name: ${{ env.HERO_SRC_WORKFLOW_NAME }}
+          src_sha: ${{ env.HERO_SRC_SHA }}
+          target_repository: ${{ env.HERO_TARGET_REPOSITORY }}
+          target_job_status: ${{ env.HERO_TARGET_JOB_STATUS }}
+          target_run_id: ${{ env.HERO_TARGET_RUN_ID }}
 ```
 
 ### Help Menu
