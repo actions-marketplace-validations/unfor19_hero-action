@@ -39,7 +39,7 @@ inputs:
   target_job_status:
     required: false
     description: Target Job Status
-    default: "null"
+    default: "pending"
   target_run_id:
     required: false
     description: Target Run ID
