@@ -194,7 +194,7 @@ elif [[ "$_HERO_ACTION" = "status-update" ]]; then
         "$_HERO_TARGET_REPOSITORY" \
         "$_HERO_SRC_REPOSITORY" \
         "$_HERO_SRC_SHA" \
-        "$_HERO_JOB_STATE"
+        "$_HERO_JOB_STATE" \
         "$_HERO_TARGET_RUN_ID"
 else
     msg_error "Unknown HERO_ACTION - ${_HERO_ACTION}"
