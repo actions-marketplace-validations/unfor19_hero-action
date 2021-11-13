@@ -57,26 +57,30 @@ Pull requests are welcome! These are the steps:
    ```bash
    docker build -t "hero-action:dev" --target "dev" .
    ```
-3. Run development image
+1. Create `.env` file
    ```bash
-   docker run --rm -it -v "$PWD":"/code" --workdir "/code" "hero-action:dev"
+   cp "env" ".env"
    ```
-4. Add the code of your new feature
-5. Run tests on your code, feel free to add more tests
+2. Run development image
+   ```bash
+   docker run --rm -it -v "$PWD":"/code" --env-file ".env" --workdir "/code" "hero-action:dev"
+   ```
+3. Add the code of your new feature
+4. Run tests on your code, feel free to add more tests
    ```bash
    # in container
    ./tests/test.sh
    ... # All good? Move on to the next step
    ```
-6. Commit your remarkable changes
+5. Commit your remarkable changes
    ```bash
    git commit -am 'Added new feature'
    ```
-7. Push to the branch
+6. Push to the branch
    ```bash
    git push --set-up-stream origin my-new-feature
    ```
-8. Create a new Pull Request and provide details about your changes
+7. Create a new Pull Request and provide details about your changes
 
 ## Authors
 

@@ -1,5 +1,58 @@
 ---
-...
+name=hero_action
+short=ha
+description=Which action to execute: dispatch, dispatch-status, status-create, status-update
+options=dispatch dispatch-status status-create status-update
+allow_env_var=true
+---
+name=hero_gh_token
+short=hgt
+description=GitHub Token to be used for calling GitHub APIs
+default=null
+allow_env_var=true
+---
+name=hero_src_repository
+short=srepo
+description=Source Repository {owner}/{repository}
+default=null
+allow_env_var=true
+---
+name=hero_src_workflow_name
+short=sworkflow
+description=Source Workflow Name
+default=testing
+allow_env_var=true
+---
+name=hero_src_sha
+short=ssha
+description=Source Repository Commit SHA
+default=null
+allow_env_var=true
+---
+name=hero_target_repository
+short=trepo
+description=Target Repository {owner}/{repository}
+default=null
+allow_env_var=true
+---
+name=hero_target_workflow_name
+target=tworkflow
+description=Target Repository Workflow Name
+default=test-action.yml
+allow_env_var=true
+---
+name=hero_target_ref
+short=tref
+description=Target Repository Branch Name
+default=master
+allow_env_var=true
+---
+name=hero_target_job_status
+short=tjobstatus
+description=Job Status To Update
+options=success failure pending
+default=null
+allow_env_var=true
 ---
 name=bargs
 description=bash entrypoint.sh --help

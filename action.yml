@@ -4,29 +4,61 @@ branding:
   color: "white"
 description: "All-in-one action to develop and maintain GitHub Actions"
 inputs:
-  # ...
-
+  action:
+    required: true
+    description: "Which action to execute: dispatch, dispatch-status, status-create, status-update"
+    default: "null"
+  gh_token:
+    required: true
+    description: "GitHub Token to be used for calling GitHub APIs"
+    default: "null"
+  src_repository:
+    required: false
+    description: "Source Repository {owner}/{repository}"
+    default: "null"
+  src_workflow_name:
+    required: false
+    description: "Source Workflow Name"
+    default: "testing"
+  src_sha:
+    required: false
+    description: "Source Repository Commit SHA"
+    default: "null"
+  target_repository:
+    required: false
+    description: "Target Repository {owner}/{repository}"
+    default: "null"
+  target_workflow_name:
+    required: false
+    description: "Target Repository Workflow Name"
+    default: "test-action.yml"
+  target_ref:
+    required: false
+    description: "Target Repository Branch Name"
+    default: "master"
+  target_job_status:
+    required: false
+    description: Job Status To Update
+    default: "null"
 runs:
   using: "docker"
   image: "Dockerfile"
   args:
-    - --src_file_path
-    - ${{ inputs.src-file-path }}
-    - --dst_file_path
-    - ${{ inputs.dst-file-path }}
-    - --start_value
-    - ${{ inputs.start-value }}
-    - --end_value
-    - ${{ inputs.end-value }}
-    - --git_user_name
-    - ${{ inputs.git-user-name }}
-    - --git_user_email
-    - ${{ inputs.git-user-email }}
-    - --git_commit_msg
-    - ${{ inputs.git-commit-msg }}
-    - --git_skip_commit
-    - ${{ inputs.git-skip-commit }}
-    - --git_skip_push
-    - ${{ inputs.git-skip-push }}
-    - --create_backup
-    - ${{ inputs.create-backup }}
+    - --hero_action
+    - ${{ inputs.action }}
+    - --hero_gh_token
+    - ${{ inputs.gh_token }}
+    - --hero_src_repository
+    - ${{ inputs.src_repository }}
+    - --hero_src_workflow_name
+    - ${{ inputs.src_workflow_name }}
+    - --hero_src_sha
+    - ${{ inputs.src_sha }}
+    - --hero_target_repository
+    - ${{ inputs.target_repository }}
+    - --hero_target_workflow_name
+    - ${{ inputs.target_workflow_name }}
+    - --hero_target_ref
+    - ${{ inputs.target_ref }}
+    - --hero_target_job_status
+    - ${{ inputs.target_job_status }}
