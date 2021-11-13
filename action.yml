@@ -43,6 +43,7 @@ inputs:
   target_run_id:
     required: false
     description: Target Run ID
+    default: "null"
 runs:
   using: "docker"
   image: "Dockerfile"

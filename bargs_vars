@@ -36,7 +36,7 @@ default=null
 allow_env_var=true
 ---
 name=hero_target_workflow_name
-target=tworkflow
+short=tworkflow
 description=Target Repository Workflow Name
 default=test-action.yml
 allow_env_var=true
