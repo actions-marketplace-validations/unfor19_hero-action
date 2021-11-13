@@ -47,6 +47,19 @@ description=Target Repository Branch Name
 default=master
 allow_env_var=true
 ---
+name=hero_target_job_status
+short=tjobstatus
+description=Target Job Status
+options=success failure pending
+default=null
+allow_env_var=true
+---
+name=hero_target_run_id
+short=trunid
+description=Target Run ID
+default=null
+allow_env_var=true
+---
 name=bargs
 description=bash entrypoint.sh --help
 default=irrelevant

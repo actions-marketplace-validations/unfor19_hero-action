@@ -76,9 +76,40 @@ github_create_status(){
         -H "Authorization: Bearer ${gh_token}" \
         "$request_url" \
         -d "$request_body" ; then
-        msg_log "Successfully dispatched"
+        msg_log "Successfully created status"
     else
-        msg_error "Failed to dispatch"
+        msg_error "Failed to create status"
+    fi
+}
+
+
+github_update_status(){
+    local gh_token
+    local target_repository
+    local src_repository
+    local src_sha
+    local target_state
+    local target_run_id
+    gh_token="$1"
+    target_repository="$2"
+    src_repository="$3"
+    src_sha="$4"
+    target_state="$5"
+    target_run_id="$6"
+
+    local request_url
+    local request_body
+    request_url="https://api.github.com/repos/${src_repository}/statuses/${src_sha}"
+    msg_log "Request URL - ${request_url}"
+    request_body='{"state":"'"${target_state}"'", "context": "test-action", "description": "Status update for '"${src_repository}"'", "target_url": "https://github.com/'${target_repository}'/actions/runs/'"${target_run_id}"'"}'
+    msg_log "Request Body - ${request_body}"
+    if curl --fail-with-body -sL -w "ResponseCode: %{http_code}\n" -X POST -H "Accept: application/vnd.github.v3+json" \
+        -H "Authorization: Bearer ${gh_token}" \
+        "$request_url" \
+        -d "$request_body" ; then
+        msg_log "Successfully updated status"
+    else
+        msg_error "Failed to update status"
     fi
 }
 
@@ -122,6 +153,8 @@ _HERO_GH_TOKEN="$HERO_GH_TOKEN"
 _HERO_TARGET_REPOSITORY="$HERO_TARGET_REPOSITORY"
 _HERO_TARGET_WORKFLOW_NAME="$HERO_TARGET_WORKFLOW_NAME"
 _HERO_TARGET_REF="$HERO_TARGET_REF"
+_HERO_TARGET_JOB_STATUS="$HERO_TARGET_JOB_STATUS"
+_HERO_TARGET_RUN_ID="$HERO_TARGET_RUN_ID"
 _HERO_SRC_REPOSITORY="$HERO_SRC_REPOSITORY"
 _HERO_SRC_WORKFLOW_NAME="$HERO_SRC_WORKFLOW_NAME"
 _HERO_SRC_SHA="$HERO_SRC_SHA"
@@ -147,6 +180,22 @@ if [[ "$_HERO_ACTION" =~ ^dispatch.* ]]; then
             "$_HERO_SRC_REPOSITORY" \
             "$_HERO_SRC_SHA"
     fi
+elif [[ "$_HERO_ACTION" = "status-update" ]]; then
+    msg_log "GitHub Update Status For Commit ${_HERO_SRC_SHA}"
+    validate_values "$_HERO_GH_TOKEN" "$_HERO_TARGET_REPOSITORY" "$_HERO_SRC_REPOSITORY" "$_HERO_SRC_SHA" "$_HERO_TARGET_JOB_STATUS" "$_HERO_TARGET_RUN_ID"
+    _HERO_JOB_STATE=""
+    if [[ "$_HERO_TARGET_JOB_STATUS" = "success" || "$_HERO_TARGET_JOB_STATUS" = "pending" ]]; then
+        _HERO_JOB_STATE="$_HERO_TARGET_JOB_STATUS"
+    else
+        _HERO_JOB_STATE="failed"
+    fi
+    github_update_status \
+        "$_HERO_GH_TOKEN" \
+        "$_HERO_TARGET_REPOSITORY" \
+        "$_HERO_SRC_REPOSITORY" \
+        "$_HERO_SRC_SHA" \
+        "$_HERO_JOB_STATE"
+        "$_HERO_TARGET_RUN_ID"
 else
     msg_error "Unknown HERO_ACTION - ${_HERO_ACTION}"
 fi
