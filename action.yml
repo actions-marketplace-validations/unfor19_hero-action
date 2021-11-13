@@ -36,10 +36,6 @@ inputs:
     required: false
     description: "Target Repository Branch Name"
     default: "master"
-  target_job_status:
-    required: false
-    description: Job Status To Update
-    default: "null"
 runs:
   using: "docker"
   image: "Dockerfile"
@@ -60,5 +56,3 @@ runs:
     - ${{ inputs.target_workflow_name }}
     - --hero_target_ref
     - ${{ inputs.target_ref }}
-    - --hero_target_job_status
-    - ${{ inputs.target_job_status }}
