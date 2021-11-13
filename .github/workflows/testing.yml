@@ -12,12 +12,6 @@ jobs:
   dispatch_test_action:
     name: Dispatch Test Action
     runs-on: ubuntu-20.04
-    env:
-      GH_OWNER: unfor19
-      GH_REPO: hero-action-test
-      GH_WORKFLOW: test-action.yml
-      GH_REF: master
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Workflow Dispatch Status
         uses: ./ # Uses an action in the root directory
