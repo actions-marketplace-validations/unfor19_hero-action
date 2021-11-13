@@ -8,6 +8,9 @@ on:
       - ".drone.yml"
   workflow_dispatch:
 
+env:
+  DOCKER_REPO: "unfor19/hero-action"
+
 jobs:
   dispatch_test_action:
     name: Dispatch Test Action
@@ -37,9 +40,8 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          IMAGE="unfor19/hero-action"
           TAG=$(echo $GITHUB_SHA | head -c7)
-          echo ::set-output name=tagged_image::${IMAGE}:${TAG}
+          echo ::set-output name=tagged_image::${DOCKER_REPO}:${TAG}
       - name: Cache Docker layers
         uses: actions/cache@v2
         with:
