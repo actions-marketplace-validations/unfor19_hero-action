@@ -12,6 +12,7 @@ env:
   DOCKER_REPO: "unfor19/hero-action"
   HERO_ACTION: "dispatch-status"
   HERO_SRC_REPOSITORY: "unfor19/hero-action"
+  HERO_SRC_WORKFLOW_NAME: testing
   HERO_TARGET_WORKFLOW_NAME: "test-action.yml"
   HERO_TARGET_REF: "master"
 
@@ -21,7 +22,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Get Src Commit SHA
+      - name: Set
         run: |
           echo "HERO_SRC_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
       - name: Workflow Dispatch Status
@@ -29,8 +30,8 @@ jobs:
         with:
           action: ${{ env.HERO_ACTION }}
           gh_token: ${{ secrets.GH_TOKEN }}
-          src_repository: ${GITHUB_REPOSITORY}
-          src_workflow_name: ${{ env.HERO_SRC_REPOSITORY }}
+          src_repository: ${{ env.HERO_SRC_REPOSITORY }}
+          src_workflow_name: ${{ env.HERO_SRC_WORKFLOW_NAME }}
           src_sha: ${{ env.HERO_SRC_SHA }}
           target_repository: ${{ env.HERO_SRC_REPOSITORY }}-test
           target_workflow_name: ${{ env.HERO_TARGET_WORKFLOW_NAME }}
