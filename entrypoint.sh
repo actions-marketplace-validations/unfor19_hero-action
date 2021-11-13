@@ -68,7 +68,7 @@ github_create_status(){
 
     local request_url
     local request_body
-    request_url="https://api.github.com/repos/${target_repository}/statuses/${src_sha}"
+    request_url="https://api.github.com/repos/${src_repository}/statuses/${src_sha}"
     msg_log "Request URL - ${request_url}"
     request_body='{"state":"pending", "context": "test-action", "description": "Status of '"${target_repository}"'", "target_url": "https://github.com/'${target_repository}'/actions/workflows/'"${target_workflow_name}"'"}'
     msg_log "Request Body - ${request_body}"
