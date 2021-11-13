@@ -12,10 +12,6 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
 
 ...
 
-## Requirements
-
-...
-
 ## Usage
 
 In your **action** repository, add the following **job**
