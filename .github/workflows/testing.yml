@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       GH_OWNER: unfor19
-      GH_REPO: replacer-action-test
+      GH_REPO: hero-action-test
       GH_WORKFLOW: test-action.yml
       GH_REF: master
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -45,7 +45,7 @@ jobs:
       - name: Prepare
         id: prep
         run: |
-          IMAGE="unfor19/replacer-action"
+          IMAGE="unfor19/hero-action"
           TAG=$(echo $GITHUB_SHA | head -c7)
           echo ::set-output name=tagged_image::${IMAGE}:${TAG}
       - name: Cache Docker layers
@@ -75,54 +75,3 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
-  update-readme:
-    # Eat your own dog food
-    # Using this action to update its own README.md with the CLI's help menu
-    runs-on: ubuntu-20.04
-    name: Update README.md
-    env:
-      SRC_FILE_PATH: .help_menu
-      DST_FILE_PATH: README.md
-    steps:
-      - uses: actions/checkout@v2
-      - name: Prepare source file
-        run: |
-          echo "\`\`\`bash" > ${{ env.SRC_FILE_PATH }}
-          ./entrypoint.sh --help >> ${{ env.SRC_FILE_PATH }}
-          echo "\`\`\`" >> ${{ env.SRC_FILE_PATH }}
-      - name: Update README.md file
-        uses: ./ # Uses an action in the root directory
-        with:
-          src-file-path: ${{ env.SRC_FILE_PATH }}
-          dst-file-path: ${{ env.DST_FILE_PATH }}
-          start-value: "<!-- help_menu_start -->"
-          end-value: "<!-- help_menu_end -->"
-
-  dry-run:
-    runs-on: ubuntu-20.04
-    name: Dry Run
-    steps:
-      - uses: actions/checkout@v2
-      - name: Prepare source file
-        run: |
-          echo "<div>$(whoami)</div>" > test_results.log
-      - name: Update README.md file
-        uses: ./ # Uses an action in the root directory
-        with:
-          src-file-path: "test_results.log"
-          dst-file-path: "README.test.md"
-          start-value: "<!-- replacer_start -->"
-          end-value: "<!-- replacer_end -->"
-          git-skip-push: true
-      - name: Prepare original source file
-        run: |
-          echo "<div>User name will appear here instead</div>" > "test_results.log"
-      - name: Revert README.test.md file
-        uses: ./ # Uses an action in the root directory
-        with:
-          src-file-path: "test_results.log"
-          dst-file-path: "README.test.md"
-          start-value: "<!-- replacer_start -->"
-          end-value: "<!-- replacer_end -->"
-          git-skip-push: true
