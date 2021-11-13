@@ -129,6 +129,7 @@ _HERO_SRC_SHA="$HERO_SRC_SHA"
 ### Main
 if [[ "$_HERO_ACTION" =~ ^dispatch.* ]]; then
     validate_values "$_HERO_GH_TOKEN" "$_HERO_TARGET_REPOSITORY" "$_HERO_SRC_REPOSITORY" "$_HERO_SRC_SHA"
+    msg_log "GitHub Workflow Dispatch ..."
     github_workflow_dispatch \
         "$_HERO_GH_TOKEN" \
         "$_HERO_TARGET_REPOSITORY" \
@@ -138,6 +139,7 @@ if [[ "$_HERO_ACTION" =~ ^dispatch.* ]]; then
         "$_HERO_SRC_WORKFLOW_NAME" \
         "$_HERO_SRC_SHA"
     if [[ "$_HERO_ACTION" = "dispatch-status" ]]; then
+        msg_log "GitHub Create Status For Commit ${_HERO_SRC_SHA}"
         github_create_status \
             "$_HERO_GH_TOKEN" \
             "$_HERO_TARGET_REPOSITORY" \
