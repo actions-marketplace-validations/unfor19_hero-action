@@ -15,12 +15,13 @@ jobs:
         run: |
           echo "\`\`\`bash" > help_menu.log
           ./entrypoint.sh --help >> help_menu.log
-          echo "\`\`\`" > help_menu.log
+          echo "\`\`\`" >> help_menu.log
+          cat help_menu.log
       - uses: unfor19/replacer-action@v1
         name: Update README.md file
         with:
-          src-file-path: "help_menu.log"
-          dst-file-path: "README.md"
+          src-file-path: help_menu.log
+          dst-file-path: README.md
           start-value: "<!-- help_menu_start -->"
           end-value: "<!-- help_menu_end -->"
           git-user-name: "replacer-action"
