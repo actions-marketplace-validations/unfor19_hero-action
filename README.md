@@ -4,9 +4,11 @@
 [![test-action](https://github.com/unfor19/hero-action-test/workflows/test-action/badge.svg)](https://github.com/unfor19/hero-action-test/actions?query=workflow%3Atest-action)
 
 
-All-in-one action to develop and maintain GitHub Actions.
+All-in-one action to test a GitHub Actions.
 
 Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test/actions?query=workflow%3Atest-action)
+
+Used in [unfor19/replacer](https://github.com/unfor19/replacer-action)
 
 ## Usage
 
@@ -32,7 +34,7 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
             with:
               action: "dispatch-status"
               src_repository: ${{ github.repository }}
-              src_workflow_name: "testing.yml"
+              src_workflow_name: ${{ github.workflow }}
               src_sha: ${{ github.sha }}
               target_repository: ${{ github.repository }}-test
               target_workflow_name: "test-action.yml"
