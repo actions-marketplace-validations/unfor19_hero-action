@@ -13,14 +13,13 @@ jobs:
       - uses: actions/checkout@v2
       - name: Prepare source file
         run: |
-          echo "\`\`\`bash" > help_menu.log
-          ./entrypoint.sh --help >> help_menu.log
-          echo "\`\`\`" >> help_menu.log
-          cat help_menu.log
+          help_menu="$(./entrypoint.sh --help)"
+          echo -e "\`\`\`\n${help_menu}\n\`\`\`" > .help_menu.log
+          cat .help_menu.log
       - uses: unfor19/replacer-action@master
         name: Update README.md file
         with:
-          src-file-path: help_menu.log
+          src-file-path: .help_menu.log
           dst-file-path: README.md
           start-value: "<!-- help_menu_start -->"
           end-value: "<!-- help_menu_end -->"
