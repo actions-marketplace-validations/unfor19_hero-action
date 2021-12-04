@@ -11,8 +11,16 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
 ## Usage
 
 1. Generate a new [Personal Access Token](https://github.com/settings/tokens) with the scope: **repo + workflow**. Keep this token in a safe place we'll use it later on.
-1. Add the following job to your **action**'s repository, e.g. `hero-action`
+2. Add the following workflow to your **action**'s repository, e.g. `hero-action`
     ```yaml
+    name: testing
+    on:
+      push:
+        branches: [master]
+        paths-ignore:
+          - "README.md"
+      workflow_dispatch:
+
     jobs:
       dispatch_test_action:
           name: Dispatch Test Action
@@ -30,7 +38,7 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
                 target_workflow_name: "test-action.yml"
                 gh_token: ${{ secrets.GH_TOKEN }} # scope: repo + workflow
     ```   
-2. Create a new GitHub repository to test your action, e.g. `hero-action-test`, add the following file `.github/workflows/test-action.yml`.
+3. Create a new GitHub repository to test your action, e.g. `hero-action-test`, add the following file `.github/workflows/test-action.yml`.
     ```yaml
     name: test-action
 
@@ -83,8 +91,8 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
               target_job_status: ${{ needs.test.outputs.target_job_status }}
               target_run_id: ${{ github.run_id }}
     ```
-3. Add the secret `GH_TOKEN` to both repositories, `hero-action` and `hero-action-test`
-4. Commit and push code to your **action**'s repository, or [dispatch a workflow](https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#workflow_dispatch) manually.
+4. Add the secret `GH_TOKEN` to both repositories, `hero-action` and `hero-action-test`
+5. Commit and push code to your **action**'s repository, or [dispatch a workflow](https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows#workflow_dispatch) manually.
 
 
 ## How It Works
