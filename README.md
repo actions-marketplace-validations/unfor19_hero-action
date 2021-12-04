@@ -111,7 +111,20 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
 
 <!-- replacer_start -->
 
-Help menu is injected here
+```
+Usage: bash entrypoint.sh --help
+
+	--hero_action                |  -ha          [ENV_VAR]          Which action to execute: dispatch, dispatch-status, status-create, status-update
+	--hero_gh_token              |  -hgt         [null]             GitHub Token to be used for calling GitHub APIs
+	--hero_src_repository        |  -srepo       [null]             Source Repository {owner}/{repository}
+	--hero_src_workflow_name     |  -sworkflow   [testing]          Source Workflow Name
+	--hero_src_sha               |  -ssha        [null]             Source Repository Commit SHA
+	--hero_target_repository     |  -trepo       [null]             Target Repository {owner}/{repository}
+	--hero_target_workflow_name  |  -tworkflow   [test-action.yml]  Target Repository Workflow Name
+	--hero_target_ref            |  -tref        [master]           Target Repository Branch Name
+	--hero_target_job_status     |  -tjobstatus  [null]             Target Job Status
+	--hero_target_run_id         |  -trunid      [null]             Target Run ID
+```
 
 <!-- replacer_end -->
 
