@@ -4,7 +4,7 @@
 [![test-action](https://github.com/unfor19/hero-action-test/workflows/test-action/badge.svg)](https://github.com/unfor19/hero-action-test/actions?query=workflow%3Atest-action)
 
 
-All-in-one action to test a GitHub Actions.
+An All-In-One action to test a GitHub Action.
 
 Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test/actions?query=workflow%3Atest-action)
 
