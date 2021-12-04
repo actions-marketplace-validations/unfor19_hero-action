@@ -97,9 +97,11 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
 
 ## How It Works
 
-1. The action repository, `hero-action`, triggers a workflow in the test repository, `hero-action-test`. Meanwhile, the `hero-action` is "stuck" with the status **pending**.
-2. The repository `hero-action-test` tests the action by using it.
+1. The action repository, `hero-action`, triggers a workflow in the test repository, `hero-action-test`. Meanwhile, the `hero-action` is "stuck" with the commit status **pending**.
+   ![hero-action-commit-status-pending](https://assets.meirg.co.il/hero-action/hero-action-commit-status-pending.png)
+2. The repository `hero-action-test` tests the action by using it, I'm testing `hero-action` by using it in `hero-action-test`, see [unfor19/hero-action/test](https://github.com/unfor19/hero-action-test/blob/master/.github/workflows/test-action.yml#L37-L48)
 3. Upon success/failure, the test action `hero-action-test` [creates a commit status](https://docs.github.com/en/rest/reference/repos#create-a-commit-status) in the action's repository, this updates the status of the **pending** workflow with **success** or **failure**
+   ![hero-action-commit-status-success](https://assets.meirg.co.il/hero-action/hero-action-commit-status-success.png)
 
 ### Help Menu
 
