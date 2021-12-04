@@ -13,7 +13,7 @@ Used in [unfor19/replacer](https://github.com/unfor19/replacer-action)
 ## Usage
 
 1. Generate a new [Personal Access Token](https://github.com/settings/tokens) with the scope: **repo + workflow**. Keep this token in a safe place we'll use it later on.
-2. Add the following workflow to your **action**'s repository, e.g. `hero-action`
+2. Add the following workflow `.github/workflows/testing.yml` to your **action**'s repository, e.g. `hero-action`
     ```yaml
     name: testing
     on:
