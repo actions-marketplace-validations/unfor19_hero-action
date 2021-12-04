@@ -23,20 +23,20 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
 
     jobs:
       dispatch_test_action:
-          name: Dispatch Test Action
-            runs-on: ubuntu-20.04
-          steps:
-            - uses: actions/checkout@v2
-            - name: Workflow Dispatch Status
+        name: Dispatch Test Action
+        runs-on: ubuntu-20.04
+        steps:
+          - uses: actions/checkout@v2
+          - name: Workflow Dispatch Status
             uses: unfor19/hero-action@v1
             with:
-                action: "dispatch-status"
-                src_repository: ${{ github.repository }}
-                src_workflow_name: "testing.yml"
-                src_sha: ${{ github.sha }}
-                target_repository: ${{ github.repository }}-test
-                target_workflow_name: "test-action.yml"
-                gh_token: ${{ secrets.GH_TOKEN }} # scope: repo + workflow
+              action: "dispatch-status"
+              src_repository: ${{ github.repository }}
+              src_workflow_name: "testing.yml"
+              src_sha: ${{ github.sha }}
+              target_repository: ${{ github.repository }}-test
+              target_workflow_name: "test-action.yml"
+              gh_token: ${{ secrets.GH_TOKEN }} # scope: repo + workflow
     ```   
 3. Create a new GitHub repository to test your action, e.g. `hero-action-test`, add the following file `.github/workflows/test-action.yml`.
     ```yaml
