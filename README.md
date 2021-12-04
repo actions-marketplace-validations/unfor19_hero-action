@@ -8,8 +8,6 @@ An All-In-One action to test a GitHub Action.
 
 Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test/actions?query=workflow%3Atest-action)
 
-Used in [unfor19/replacer](https://github.com/unfor19/replacer-action)
-
 ## Usage
 
 1. Generate a new [Personal Access Token](https://github.com/settings/tokens) with the scope: **repo + workflow**. Keep this token in a safe place we'll use it later on.
@@ -131,6 +129,12 @@ Usage: bash entrypoint.sh --help
 <!-- replacer_end -->
 
 _NOTE_: the code block above :point_up: was automatically generated with replacer! See the raw version of this [README.md](https://raw.githubusercontent.com/unfor19/hero-action/master/README.md) file
+
+
+## Projects Using This Action
+
+- [unfor19/replacer-action](https://github.com/unfor19/replacer-action)
+- [unfor19/install-aws-cli-action](https://github.com/unfor19/install-aws-cli-action)
 
 ## Contributing
 
