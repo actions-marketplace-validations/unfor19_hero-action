@@ -109,12 +109,11 @@ Tested in [unfor19/hero-action-test](https://github.com/unfor19/hero-action-test
 ./entrypoint.sh --help
 ```
 
-<!-- help_menu_start -->
+<!-- replacer_start -->
 
-```bash
 Help menu is injected here
-```
-<!-- help_menu_end -->
+
+<!-- replacer_end -->
 
 _NOTE_: the code block above :point_up: was automatically generated with replacer! See the raw version of this [README.md](https://raw.githubusercontent.com/unfor19/hero-action/master/README.md) file
 
