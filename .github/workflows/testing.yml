@@ -9,11 +9,6 @@ on:
 
 env:
   DOCKER_REPO: "unfor19/hero-action"
-  HERO_ACTION: "dispatch-status"
-  HERO_SRC_REPOSITORY: "unfor19/hero-action"
-  HERO_SRC_WORKFLOW_NAME: testing
-  HERO_TARGET_WORKFLOW_NAME: "test-action.yml"
-  HERO_TARGET_REF: "master"
 
 jobs:
   dispatch_test_action:
@@ -21,20 +16,17 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Set Environment Variables
-        run: |
-          echo "HERO_SRC_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
       - name: Workflow Dispatch Status
         uses: ./ # Uses an action in the root directory
         with:
-          action: ${{ env.HERO_ACTION }}
+          action: dispatch-status
           gh_token: ${{ secrets.GH_TOKEN }}
-          src_repository: ${{ env.HERO_SRC_REPOSITORY }}
-          src_workflow_name: ${{ env.HERO_SRC_WORKFLOW_NAME }}
-          src_sha: ${{ env.HERO_SRC_SHA }}
-          target_repository: ${{ env.HERO_SRC_REPOSITORY }}-test
-          target_workflow_name: ${{ env.HERO_TARGET_WORKFLOW_NAME }}
-          target_ref: ${{ env.HERO_TARGET_REF }}
+          src_repository: ${{ github.repository }}
+          src_workflow_name: ${{ github.workflow }}
+          src_sha: ${{ github.sha }}
+          target_repository: ${{ github.repository }}-test
+          target_workflow_name: test-action.yml
+          target_ref: master
   test-docker:
     runs-on: ubuntu-20.04
     name: Test Docker
