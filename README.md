@@ -30,7 +30,7 @@ Used in [unfor19/replacer](https://github.com/unfor19/replacer-action)
         steps:
           - uses: actions/checkout@v2
           - name: Workflow Dispatch Status
-            uses: unfor19/hero-action@v1
+            uses: unfor19/hero-action@v1.0.2
             with:
               action: "dispatch-status"
               src_repository: ${{ github.repository }}
@@ -82,7 +82,7 @@ Used in [unfor19/replacer](https://github.com/unfor19/replacer-action)
         if: ${{ always() }}
         steps:
           - name: Status Update Action Repo
-            uses: unfor19/hero-action@v1
+            uses: unfor19/hero-action@v1.0.2
             with:
               action: "status-update"
               gh_token: ${{ secrets.GH_TOKEN }} # scope: repo + workflow
