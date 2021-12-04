@@ -17,7 +17,7 @@ jobs:
           ./entrypoint.sh --help >> help_menu.log
           echo "\`\`\`" >> help_menu.log
           cat help_menu.log
-      - uses: unfor19/replacer-action@v1
+      - uses: unfor19/replacer-action@master
         name: Update README.md file
         with:
           src-file-path: help_menu.log
