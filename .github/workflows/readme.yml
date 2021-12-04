@@ -14,15 +14,15 @@ jobs:
       - name: Prepare source file
         run: |
           help_menu="$(./entrypoint.sh --help)"
-          echo -e "\`\`\`\n${help_menu}\n\`\`\`" > .help_menu.log
+          echo -e "\`\`\`${help_menu}\n\`\`\`" > .help_menu.log
           cat .help_menu.log
       - uses: unfor19/replacer-action@master
         name: Update README.md file
         with:
           src-file-path: .help_menu.log
           dst-file-path: README.md
-          start-value: "<!-- help_menu_start -->"
-          end-value: "<!-- help_menu_end -->"
+          start-value: "<!-- replacer_start -->"
+          end-value: "<!-- replacer_end -->"
           git-user-name: "replacer-action"
           git-user-email: "replacer-action@meirg.co.il"
           git-commit-msg: "Updated by GitHub Actions"
